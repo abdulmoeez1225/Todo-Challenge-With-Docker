@@ -1,4 +1,4 @@
-# TodoMaster
+# Todo-Challenge-With-Docker
 
 A full-stack todo application with microservices architecture. Built with Node.js, React, and PostgreSQL.
 
@@ -22,7 +22,7 @@ A full-stack todo application with microservices architecture. Built with Node.j
 1. Clone and start:
    ```bash
    git clone <repository-url>
-   cd AICI_Challenge
+   cd Todo-Challenge-With-Docker
    docker-compose up --build
    ```
 
@@ -38,6 +38,7 @@ A full-stack todo application with microservices architecture. Built with Node.j
 - Real-time todo management
 - Responsive design
 - Status filtering and search
+
 ## Frontend
 
 - Two-column layout (add/manage todos)
@@ -333,8 +334,8 @@ model Todo {
 ## Development
 
 ```bash
-git clone <repo>
-cd AICI_Challenge
+git clone <repository-url>
+cd Todo-Challenge-With-Docker
 docker-compose up --build
 ```
 
