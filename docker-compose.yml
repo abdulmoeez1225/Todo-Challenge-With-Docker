@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: appdb
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - app-db-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  user-service:
+    build: ./user-service
+    environment:
+      - PORT=3001
+      - DATABASE_URL=postgresql://appuser:password@db:5432/appdb
+      - JWT_SECRET=supersecretkey
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+
+  todo-service:
+    build: ./todo-service
+    environment:
+      - PORT=3002
+      - DATABASE_URL=postgresql://appuser:password@db:5432/appdb
+      - JWT_SECRET=supersecretkey
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - user-service
+      - todo-service
+
+volumes:
+  app-db-data:
