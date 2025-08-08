@@ -7,14 +7,15 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 
 // Generate unique email for each test run
-const generateUniqueEmail = () => `test-${Date.now()}-${Math.random().toString(36).substring(7)}@example.com`;
+const generateUniqueEmail = () =>
+  `test-${Date.now()}-${Math.random().toString(36).substring(7)}@example.com`;
 
 describe('User Service Routes', () => {
   describe('POST /api/users/register', () => {
     it('should register a new user with valid data', async () => {
       const userData = {
         email: generateUniqueEmail(),
-        password: 'password123'
+        password: 'password123',
       };
 
       const response = await request(app)
@@ -31,14 +32,11 @@ describe('User Service Routes', () => {
     it('should return 409 for duplicate email', async () => {
       const userData = {
         email: generateUniqueEmail(),
-        password: 'password123'
+        password: 'password123',
       };
 
       // First registration should succeed
-      await request(app)
-        .post('/api/users/register')
-        .send(userData)
-        .expect(201);
+      await request(app).post('/api/users/register').send(userData).expect(201);
 
       // Second registration with same email should fail
       const response = await request(app)
@@ -53,7 +51,7 @@ describe('User Service Routes', () => {
     it('should return 400 for invalid password length', async () => {
       const userData = {
         email: generateUniqueEmail(),
-        password: '123'
+        password: '123',
       };
 
       const response = await request(app)
@@ -67,7 +65,7 @@ describe('User Service Routes', () => {
 
     it('should return 400 for missing email', async () => {
       const userData = {
-        password: 'password123'
+        password: 'password123',
       };
 
       const response = await request(app)
@@ -93,7 +91,7 @@ describe('User Service Routes', () => {
     it('should return 401 for invalid credentials', async () => {
       const credentials = {
         email: 'nonexistent@example.com',
-        password: 'wrongpassword'
+        password: 'wrongpassword',
       };
 
       const response = await request(app)
