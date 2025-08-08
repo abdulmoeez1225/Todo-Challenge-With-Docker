@@ -2,8 +2,18 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import { prisma } from '../db';
-import type { CreateUserRequest, LoginRequest, LoginResponse, UserResponse, JWTPayload } from '../types';
-import { validateCreateUserRequest, validateLoginRequest, ValidationError } from '../utils/validation';
+import type {
+  CreateUserRequest,
+  LoginRequest,
+  LoginResponse,
+  UserResponse,
+  JWTPayload,
+} from '../types';
+import {
+  validateCreateUserRequest,
+  validateLoginRequest,
+  ValidationError,
+} from '../utils/validation';
 
 export class UserService {
   private readonly saltRounds = 10;
@@ -13,7 +23,9 @@ export class UserService {
   constructor() {
     this.jwtSecret = process.env.JWT_SECRET || 'supersecretkey';
     if (this.jwtSecret === 'supersecretkey') {
-      console.warn('WARNING: Using default JWT secret. Set JWT_SECRET environment variable in production.');
+      console.warn(
+        'WARNING: Using default JWT secret. Set JWT_SECRET environment variable in production.'
+      );
     }
   }
 
@@ -70,7 +82,10 @@ export class UserService {
     }
 
     // Verify password
-    const isPasswordValid = await bcrypt.compare(loginData.password, user.passwordHash);
+    const isPasswordValid = await bcrypt.compare(
+      loginData.password,
+      user.passwordHash
+    );
     if (!isPasswordValid) {
       throw new ValidationError('Invalid credentials');
     }

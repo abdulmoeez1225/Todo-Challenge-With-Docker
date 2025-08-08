@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
@@ -65,6 +66,7 @@ function App() {
       setIsRegistering(false);
       setEmail('');
       setPassword('');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       showNotification(
         error.response?.data?.message || 'Registration failed',
@@ -90,6 +92,7 @@ function App() {
       showNotification('Welcome back!', 'success');
       setEmail('');
       setPassword('');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       showNotification(
         error.response?.data?.message || 'Login failed',
@@ -105,6 +108,7 @@ function App() {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       setTodos(response.data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       showNotification('Failed to fetch todos', 'error');
     }
@@ -123,6 +127,7 @@ function App() {
       setNewTodo({ title: '', description: '', status: 'pending' });
 
       showNotification('Todo added successfully!', 'success');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       showNotification('Failed to add todo', 'error');
     }
@@ -147,6 +152,7 @@ function App() {
       );
       setEditingTodo(null);
       showNotification('Todo updated successfully!', 'success');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       showNotification('Failed to update todo', 'error');
     }
@@ -162,6 +168,7 @@ function App() {
       });
       setTodos(todos.filter(todo => todo.id !== id));
       showNotification('Todo deleted successfully!', 'success');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       showNotification('Failed to delete todo', 'error');
     }

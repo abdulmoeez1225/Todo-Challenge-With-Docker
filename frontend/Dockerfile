@@ -15,10 +15,13 @@ COPY tsconfig*.json ./
 COPY vite.config.ts ./
 
 # Install dependencies with clean install for reproducible builds
-RUN npm ci --only=production --no-audit --no-fund
+RUN npm ci --no-audit --no-fund
 
 # Copy source code
 COPY . .
+
+# Install all dependencies for build/lint/test
+RUN npm ci --no-audit --no-fund
 
 # Run linting and type checking
 RUN npm run lint && npm run format:check
@@ -26,16 +29,18 @@ RUN npm run lint && npm run format:check
 # Build the application
 RUN npm run build
 
+# Remove dev dependencies for final image
+RUN npm prune --production
+
 # Production stage
 FROM nginx:1.25-alpine
 
-# Install security updates and remove unnecessary packages
 RUN apk update && apk upgrade && \
     apk add --no-cache dumb-init && \
     rm -rf /var/cache/apk/*
 
-# Create non-root user
-RUN addgroup -g 1001 -S nginx && adduser -S nginx -u 1001 -G nginx
+# Use the built-in nginx user/group (already non-root)
+USER root
 
 # Copy built application
 COPY --from=build --chown=nginx:nginx /app/dist /usr/share/nginx/html
@@ -44,18 +49,15 @@ COPY --from=build --chown=nginx:nginx /app/dist /usr/share/nginx/html
 COPY --chown=nginx:nginx nginx.conf /etc/nginx/conf.d/default.conf
 
 # Set proper permissions
-RUN chown -R nginx:nginx /usr/share/nginx/html && \
-    chown -R nginx:nginx /var/cache/nginx && \
-    chown -R nginx:nginx /var/log/nginx && \
-    chown -R nginx:nginx /etc/nginx/conf.d && \
+RUN chown -R nginx:nginx /usr/share/nginx/html \
+    /var/cache/nginx /var/log/nginx /etc/nginx/conf.d && \
     touch /var/run/nginx.pid && \
-    chown -R nginx:nginx /var/run/nginx.pid
+    chown nginx:nginx /var/run/nginx.pid
 
-# Switch to non-root user
+# Switch to non-root
 USER nginx
 
 EXPOSE 80
-
-# Use dumb-init to handle signals properly
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["nginx", "-g", "daemon off;"]
+

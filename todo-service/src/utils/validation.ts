@@ -1,4 +1,8 @@
-import type { CreateTodoRequest, UpdateTodoRequest, TodoStatus } from '../types';
+import type {
+  CreateTodoRequest,
+  UpdateTodoRequest,
+  TodoStatus,
+} from '../types';
 
 export class ValidationError extends Error {
   constructor(message: string) {
@@ -23,7 +27,9 @@ export const validateCreateTodoRequest = (data: CreateTodoRequest): void => {
   }
 
   if (!data.status || !validateTodoStatus(data.status)) {
-    throw new ValidationError(`Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`);
+    throw new ValidationError(
+      `Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`
+    );
   }
 
   if (data.description && data.description.length > 1000) {
@@ -42,7 +48,9 @@ export const validateUpdateTodoRequest = (data: UpdateTodoRequest): void => {
   }
 
   if (data.status !== undefined && !validateTodoStatus(data.status)) {
-    throw new ValidationError(`Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`);
+    throw new ValidationError(
+      `Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`
+    );
   }
 
   if (data.description !== undefined && data.description.length > 1000) {

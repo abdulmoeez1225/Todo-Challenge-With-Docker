@@ -1,9 +1,22 @@
 import { prisma } from '../db';
-import type { CreateTodoRequest, UpdateTodoRequest, TodoResponse, JWTPayload } from '../types';
-import { validateCreateTodoRequest, validateUpdateTodoRequest, validateTodoId, ValidationError } from '../utils/validation';
+import type {
+  CreateTodoRequest,
+  UpdateTodoRequest,
+  TodoResponse,
+  JWTPayload,
+} from '../types';
+import {
+  validateCreateTodoRequest,
+  validateUpdateTodoRequest,
+  validateTodoId,
+  ValidationError,
+} from '../utils/validation';
 
 export class TodoService {
-  async createTodo(todoData: CreateTodoRequest, user: JWTPayload): Promise<TodoResponse> {
+  async createTodo(
+    todoData: CreateTodoRequest,
+    user: JWTPayload
+  ): Promise<TodoResponse> {
     validateCreateTodoRequest(todoData);
 
     const todo = await prisma.todo.create({
@@ -42,7 +55,11 @@ export class TodoService {
     return this.mapTodoToResponse(todo);
   }
 
-  async updateTodo(id: number, updateData: UpdateTodoRequest, user: JWTPayload): Promise<TodoResponse> {
+  async updateTodo(
+    id: number,
+    updateData: UpdateTodoRequest,
+    user: JWTPayload
+  ): Promise<TodoResponse> {
     validateUpdateTodoRequest(updateData);
 
     // First check if todo exists and belongs to user
